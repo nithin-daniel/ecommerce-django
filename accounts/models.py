@@ -4,11 +4,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 class CustomAccountManager(BaseUserManager):
-    def create_user(self,email,password, **other_fields):
+    def create_user(self,email,password,first_name,last_name,username,phone_number, **other_fields):
         if not email:
             raise ValueError(_('You must provide an email address'))
         email = self.normalize_email(email)
-        user = self.model(email=email, **other_fields)
+        user = self.model(email=email,first_name=first_name,last_name=last_name,username=username,phone_number=phone_number,**other_fields)
         user.set_password(password)
         user.save()
         return user

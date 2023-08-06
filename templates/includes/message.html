@@ -1,0 +1,20 @@
+{% for message in messages %}
+<div class="messages">
+    <div class="container-fluid p-0 mt-3">
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+        </button>
+        {{ message }}
+    </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!-- jQuery CDN link (latest version) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    setTimeout(function() {
+        $('.messages').fadeOut('fast');
+    }, 6000); // <-- time in milliseconds
+    </script>
