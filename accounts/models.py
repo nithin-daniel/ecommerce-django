@@ -30,6 +30,15 @@ class CustomAccountManager(BaseUserManager):
 class CustomUser(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(_('Email Address'),unique=True)
     password = models.CharField(_('Password Field'),max_length = 25,unique=True)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50,unique=True)
+    phone_number = models.CharField(max_length=50)
+
+
+    # requried
+    date_joined = models.DateTimeField(auto_now_add = True)
+    last_joined = models.DateTimeField(default=timezone.now,editable=False, blank=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -38,7 +47,7 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
 
 
     USERNAME_FIELD='email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['first_name','last_name']
 
     def __str__(self):
         return self.email
