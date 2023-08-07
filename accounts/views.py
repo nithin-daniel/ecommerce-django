@@ -34,12 +34,15 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
+     
         email = request.POST["email"]
         password = request.POST["password"]
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             return redirect('home')
+        elif User.objects.filter(email=email).exists():
+            messages.warning(request,"Wrong Password")
         else:
             messages.error(request,"User Not Found")
         return render(request,'accounts/login.html')
