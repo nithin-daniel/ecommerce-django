@@ -1,8 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
     
-<h1>Hello World</h1>
-{% if request.user.is_authenticated %}
-<h1>Hello {{request.user.username}}</h1>
-{% endif %}
+<div class="container mt-5">
+    <div class="row">
+    {% for product in all_product %}
+    <div class="card mx-3" style="width: 15rem; height: 18rem; cursor: pointer;">
+        <img src="{{ product.image.url }}"  class="card-img-top h-50" alt="">
+        <div class="card-body">
+          <a href=""><h5 class="card-title">{{ product.title }}</h5></a>
+          <p class="card-text">{{ product.description }}</p>
+          <a href="#" class="btn btn-primary">Add to cart</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+</div>
 {% endblock content %}
