@@ -4,7 +4,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 class CustomAccountManager(BaseUserManager):
-    def create_user(self,email,password,first_name,last_name,username,phone_number, **other_fields):
+    def create_user(self,email,first_name,last_name,password,username,phone_number, **other_fields):
         if not email:
             raise ValueError(_('You must provide an email address'))
         email = self.normalize_email(email)
@@ -13,7 +13,7 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
     
-    def create_superuser(self,email,password,**other_fields):
+    def create_superuser(self,email,first_name,last_name,password,username=None,phone_number=None, **other_fields):
 
         other_fields.setdefault('is_staff',True)
         other_fields.setdefault('is_superuser',True)
@@ -24,7 +24,7 @@ class CustomAccountManager(BaseUserManager):
         if other_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must be assigned to is_superuser=True.')
         
-        return self.create_user(email,password, **other_fields)
+        return self.create_user(email,first_name,last_name,password,username,phone_number,**other_fields)
 
     
 class CustomUser(AbstractBaseUser,PermissionsMixin):
@@ -32,8 +32,8 @@ class CustomUser(AbstractBaseUser,PermissionsMixin):
     password = models.CharField(_('Password Field'),max_length = 25)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50,unique=True)
-    phone_number = models.CharField(max_length=50)
+    username = models.CharField(max_length=50,unique=True,default=None,blank=False,null=True)
+    phone_number = models.CharField(max_length=50,default=None,blank=False,null=True)
 
 
     # requried
