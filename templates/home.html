@@ -5,9 +5,8 @@
     <div class="row">
     {% for product in all_product %}
     <div class="card mx-3" style="width: 15rem; height: 18rem; cursor: pointer;">
-        <img src="{{ product.image.url }}"  class="card-img-top h-50" alt="{{ product.title }}">
+        <img src="{{ product.image.url }}"  class="card-img-top" alt="{{ product.title }}">
         <div class="card-body">
-          <a href="{% url 'product_detail_page' id=product.product_id %}"><h5 class="card-title">{{ product.title }}</h5></a>
           <h5 class="card-title"><a href="{% url 'product_detail_page' id=product.product_id %}">{{ product.title }}</h5>
           <p class="card-text">{{ product.description }}</p>
           <p class="card-text">₹{{ product.prize }}</p>
