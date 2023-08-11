@@ -21,10 +21,11 @@ from django.conf.urls.static import static
 from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/',include('accounts.urls')),
     path('',views.home,name='home'),
     path('product-detail-page/<uuid:id>',views.product_detail,name='product_detail_page'),
     path('store/',include('store.urls')),
-    path('accounts/',include('accounts.urls'))
+    path('cart/',include('cart.urls')),
 ]
 if settings.DEBUG:
         urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

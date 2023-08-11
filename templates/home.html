@@ -5,13 +5,15 @@
     <div class="row">
     {% for product in all_product %}
     <div class="card mx-3" style="width: 15rem; height: 18rem; cursor: pointer;">
-        <img src="{{ product.image.url }}"  class="card-img-top" alt="{{ product.title }}">
+      <a href="{% url 'product_detail_page' id=product.product_id %}">
+        <img src="{{ product.image.url }}"  class="card-img-top mt-3" alt="{{ product.title }}" style="height: 8rem; object-fit: cover;" >
         <div class="card-body">
-          <h5 class="card-title"><a href="{% url 'product_detail_page' id=product.product_id %}">{{ product.title }}</h5>
+          <h5 class="card-title">{{ product.title }}</h5>
           <p class="card-text">{{ product.description }}</p>
           <p class="card-text">₹{{ product.prize }}</p>
-          <a href="#" class="btn btn-primary">Add to cart</a>
-        </div>
+          <a href="" class="btn btn-primary">Add to cart</a>
+        </div> 
+      </a>
       </div>
       {% endfor %}
     </div>
