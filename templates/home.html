@@ -2,6 +2,7 @@
 {% block content %}
     
 <div class="container mt-5">
+  {% include 'includes/message.html' %}
     <div class="row">
     {% for product in all_product %}
     <div class="card mx-3" style="width: 15rem; height: 18rem; cursor: pointer;">
@@ -11,7 +12,7 @@
           <h5 class="card-title">{{ product.title }}</h5>
           <p class="card-text">{{ product.description }}</p>
           <p class="card-text">₹{{ product.prize }}</p>
-          <a href="" class="btn btn-primary">Add to cart</a>
+          <a href="{% url 'cart:cart-add' id=product.product_id %}" class="btn btn-primary">Add to cart</a>
         </div> 
       </a>
       </div>
