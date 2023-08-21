@@ -16,18 +16,7 @@ def cart_page(request):
 
 @login_required()
 def add_to_cart(request,id):
-    # product = Product.objects.get(product_id=id)
     user = request.user
-    # if not Cart.objects.filter(user=user).exists():
-    #     Cart.objects.create(user=user)
-    #     if not CartItem.objects.filter(product=product).exists():
-    #         CartItem.objects.create(product=product)
-    #         return redirect('home')
-    #     else:
-    #         messages.warning(request,"Product already added")
-    #         return redirect('home')
-    # else:
-    #     messages.warning(request,"Product added Successfully")
     cart_item = CartItem.objects.filter(user=user,product__product_id=id)
     if cart_item.exists():
         item = cart_item.first()
