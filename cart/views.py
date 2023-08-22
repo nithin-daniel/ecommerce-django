@@ -5,14 +5,17 @@ from django.conf import settings
 from store.models import Product
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from datetime import datetime
-from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
+@login_required()
 def cart_page(request):
     user = request.user
-    get_product = CartItem.objects.all().delete()
-    print(get_product)
-    return render(request,'cart/cart.html')
+    get_product = CartItem.objects.filter(user=user)
+    for product in get_product:
+        img = product.product.image   
+    context = {
+        'product' : get_product
+    }
+    return render(request,'cart/cart.html',context)
 
 @login_required()
 def add_to_cart(request,id):
@@ -25,4 +28,8 @@ def add_to_cart(request,id):
     else:
         prod = Product.objects.get(product_id=id)
         CartItem.objects.create(user=user,product=prod)
+        messages.info(request,'Product Added')
     return redirect('home')
+
+def delete_item(request):
+    return redirect('cart')
