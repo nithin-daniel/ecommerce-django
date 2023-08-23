@@ -35,3 +35,10 @@ def delete_item(request,id):
     CartItem.objects.filter(product__product_id=id).delete()
     messages.success(request,'Product Deleted')
     return redirect('cart:cart')
+
+def decrement_quantity(request,id):
+    CartItem.objects.get(product=id)
+    CartItem.quantity -= 1
+    CartItem.save()
+    print( CartItem.quantity )
+    return redirect('cart:cart')
