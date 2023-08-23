@@ -31,5 +31,7 @@ def add_to_cart(request,id):
         messages.info(request,'Product Added')
     return redirect('home')
 
-def delete_item(request):
-    return redirect('cart')
+def delete_item(request,id):
+    CartItem.objects.filter(product__product_id=id).delete()
+    messages.success(request,'Product Deleted')
+    return redirect('cart:cart')

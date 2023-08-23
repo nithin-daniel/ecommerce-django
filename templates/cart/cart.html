@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-    <table class="table">
+  {% include 'includes/message.html' %}
+  {% if product|length == 0 %}
+  <h1 style="text-align: center; padding-top: 12rem;">Your Cart is empty</h1>
+  <a href="{% url 'home' %}"><button type="button" class="btn btn-primary" style="margin-left: 45%;">Go to Home</button></a>
+  {% else %}
+  <table class="table">
         <thead>
           <tr>
             <th scope="col">Product Name</th>
@@ -17,11 +22,11 @@
             <td>{{ product.quantity }}</td>
             <td>{{ product.product.prize }}</td>
             <td><img src="{{ product.product.image.url }}" style="width: 50px; height: 50px;" alt=""></td>
-            <td><a href="{% url 'delete_book' book.id %}" class="btn btn-danger">Delete</a></td>
-
+            <td><a href="{% url 'cart:cart-delete' id=product.product.product_id  %}" class="btn btn-danger">Delete</a></td>
           </tr>
           {% endfor %}
         </tbody>
-      </table>
+      </table> 
+      {% endif %}
 </div>
 {% endblock content %}
