@@ -5,15 +5,15 @@ from django.conf import settings
 from store.models import Product
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import F ,Sum
 # Create your views here.
 @login_required()
 def cart_page(request):
     user = request.user
     get_product = CartItem.objects.filter(user=user)
-    for product in get_product:
-        img = product.product.image   
+    get_product = get_product.annotate(total_amount=Sum(F('product__prize')*F('quantity')))
     context = {
-        'product' : get_product
+        'product' : get_product,
     }
     return render(request,'cart/cart.html',context)
 
@@ -37,8 +37,18 @@ def delete_item(request,id):
     return redirect('cart:cart')
 
 def decrement_quantity(request,id):
-    CartItem.objects.get(product=id)
-    CartItem.quantity -= 1
-    CartItem.save()
-    print( CartItem.quantity )
+    decrement = CartItem.objects.filter(product=id)
+    for dec in decrement:
+        if dec.quantity == 1:
+            break
+        dec.quantity = dec.quantity - 1
+        dec.save()
+        
     return redirect('cart:cart')
+
+def increment_quantity(request,id):
+   increment = CartItem.objects.filter(product=id)
+   for inc in increment:
+        inc.quantity = inc.quantity + 1
+        inc.save()
+   return redirect('cart:cart')
