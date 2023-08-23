@@ -10,7 +10,9 @@
         <thead>
           <tr>
             <th scope="col">Product Name</th>
+            <th></th>
             <th scope="col">Quantity</th>
+            <th></th>
             <th scope="col">Prize</th>
             <th scope="col">Image</th>
           </tr>
@@ -19,7 +21,9 @@
           {% for product in  product %}
           <tr>
             <td>{{ product.product }}</td>
+            <td><button type="button" class="btn btn-light">&minus;</button></td>
             <td>{{ product.quantity }}</td>
+            <td><button type="button" class="btn btn-light">&plus;</button></td>
             <td>{{ product.product.prize }}</td>
             <td><img src="{{ product.product.image.url }}" style="width: 50px; height: 50px;" alt=""></td>
             <td><a href="{% url 'cart:cart-delete' id=product.product.product_id  %}" class="btn btn-danger">Delete</a></td>
