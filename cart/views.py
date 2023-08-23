@@ -10,8 +10,7 @@ from django.db.models import F ,Sum
 @login_required()
 def cart_page(request):
     user = request.user
-    get_product = CartItem.objects.filter(user=user)
-    get_product = get_product.annotate(total_amount=Sum(F('product__prize')*F('quantity')))
+    get_product = CartItem.objects.filter(user=user).annotate(total_amount=Sum(F('product__prize')*F('quantity')))
     context = {
         'product' : get_product,
     }
