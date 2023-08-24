@@ -10,7 +10,7 @@
     <title>Ecommerce-Website</title>
 </head>
 <body>
-    {% include 'includes/navbar.html' %}
+    {% include 'includes/navbar.html' with total_count=total_count %} 
     {% block content %}
 
     {% endblock content %}
