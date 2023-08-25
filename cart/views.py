@@ -12,7 +12,6 @@ def cart_page(request):
     user = request.user
     get_product = CartItem.objects.filter(user=user).annotate(total_amount=Sum(F('product__prize')*F('quantity')))
     total_count = get_product.count()
-    print(total_count)
     context = {
         'product' : get_product,
     }

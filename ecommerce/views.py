@@ -4,6 +4,7 @@ from cart.models import CartItem
 # Create your views here.
 def home(request):
     all_product = Product.objects.all()
+    print(request.user)
     context = {
         'all_product':all_product
     }
