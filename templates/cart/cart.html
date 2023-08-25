@@ -24,12 +24,22 @@
             <td><a href="{% url 'cart:cart-minus' id=product.product.product_id %}"class="btn btn-light">&minus;</a></td>
             <td>{{ product.quantity }}</td>
             <td><a href="{% url 'cart:cart-plus' id=product.product.product_id %}"class="btn btn-light">&plus;</a></td>
-            <td>{{ product.total_amount }}</td>
+            <td>&#8377; {{ product.total_amount }}</td>
             <td><img src="{{ product.product.image.url }}" style="width: 50px; height: 50px;" alt=""></td>
             <td><a href="{% url 'cart:cart-delete' id=product.product.product_id  %}" class="btn btn-danger">Delete</a></td>
           </tr>
           {% endfor %}
         </tbody>
+        <thead>
+          <tr>
+            <th scope="col">Total Prize</th>
+            <th></th>
+            <th scope="col"></th>
+            <th></th>
+            <th scope="col">&#8377;{{ total_amount }}</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
       </table> 
       {% endif %}
 </div>
