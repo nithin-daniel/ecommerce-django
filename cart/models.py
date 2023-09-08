@@ -12,7 +12,6 @@ from django.conf import settings
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE,null=True)
     quantity = models.IntegerField(default=1)
-    price = models.FloatField(blank=True,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
 
     def __str__(self):

@@ -15,7 +15,8 @@ def cart_page(request):
     total_amount = sum(item.total_amount for item in get_product)
     context = {
         'product' : get_product,
-        'total_amount':total_amount
+        'total_amount':total_amount,
+        'razorpay_key':settings.RAZORPAY_KEY_ID
     }
     return render(request,'cart/cart.html',context)
 

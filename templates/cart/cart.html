@@ -6,6 +6,9 @@
   <h1 style="text-align: center; padding-top: 12rem;">Your Cart is empty</h1>
   <a href="{% url 'home' %}"><button type="button" class="btn btn-primary" style="margin-left: 45%;">Go to Home</button></a>
   {% else %}
+
+<form action="{% url 'payments:checkout'  %}" method="POST">
+  {% csrf_token %}
   <table class="table">
         <thead>
           <tr>
@@ -24,7 +27,11 @@
             <td><a href="{% url 'cart:cart-minus' id=product.product.product_id %}"class="btn btn-light">&minus;</a></td>
             <td>{{ product.quantity }}</td>
             <td><a href="{% url 'cart:cart-plus' id=product.product.product_id %}"class="btn btn-light">&plus;</a></td>
-            <td>&#8377; {{ product.total_amount }}</td>
+            <td>&#8377; 
+              <!-- <input type="hidden" name="amount" value="{{ product.total_amount }}"> -->
+              <a href="">{{ product.total_amount }}</a>
+              <input type="hidden" name="amount" value="{{ product.total_amount }}">
+            </td>
             <td><img src="{{ product.product.image.url }}" style="width: 50px; height: 50px;" alt=""></td>
             <td><a href="{% url 'cart:cart-delete' id=product.product.product_id  %}" class="btn btn-danger">Delete</a></td>
           </tr>
@@ -41,6 +48,8 @@
           </tr>
         </thead>
       </table> 
+    </form>
       {% endif %}
 </div>
+
 {% endblock content %}

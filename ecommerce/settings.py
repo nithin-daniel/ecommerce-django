@@ -148,4 +148,8 @@ MESSAGE_TAGS = {
         messages.SUCCESS: 'alert-success',
         messages.WARNING: 'alert-warning',
         messages.ERROR: 'alert-danger',
- }
+}
+
+# Razorpay Keys
+RAZORPAY_KEY_ID = config('RAZOR_KEY_ID')
+RAZORPAY_KEY_SECRET = config('RAZOR_KEY_SECRET')
