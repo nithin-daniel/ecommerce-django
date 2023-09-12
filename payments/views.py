@@ -3,8 +3,10 @@ from django.conf import settings
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F ,Sum
-from cart.models import CartItem
+from cart.models import CartItem,Order
 from accounts.models import CustomUser
+from datetime import date
+import uuid
 def payment(request,total_amount):
     print(total_amount)
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
@@ -26,7 +28,6 @@ def checkout(request):
         first_name = request.POST['firstName']
         last_name = request.POST['lastName']
         address_1 = request.POST['Address1']
-        address_2 = request.POST['Address2']
         payment_method = request.POST['paymentMethod']
         arr = []
         for product in get_product:
@@ -38,8 +39,14 @@ def checkout(request):
             payment = client.order.create({'amount':int(total_amount) * 100,'currency':'INR','payment_capture':1})
             order_id = payment['id']
             order_status = payment['status']
-            # if order_status == 'created':
-
+            if order_status == 'created':
+                order_insert = Order(order_id=order_id,customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
+                order_insert.save()
+                CartItem.objects.all().delete()
+        else:
+            order_insert = Order(order_id=uuid.uuid4(),customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
+            order_insert.save()
+            CartItem.objects.all().delete()
     return render(request,'checkout/checkout.html',context)
 
 @csrf_exempt
