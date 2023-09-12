@@ -16,7 +16,7 @@ def checkout(request):
     user = request.user
     get_product = CartItem.objects.filter(user=user).annotate(total_amount=Sum(F('product__prize')*F('quantity')))
     total_amount = sum(item.total_amount for item in get_product)
-    get_user_data = CustomUser.objects.filter(email=request.user.email).first(  )
+    get_user_data = CustomUser.objects.filter(email=request.user.email).first()
     context = {
         'product' : get_product,
         'total_amount':total_amount,
@@ -28,7 +28,18 @@ def checkout(request):
         address_1 = request.POST['Address1']
         address_2 = request.POST['Address2']
         payment_method = request.POST['paymentMethod']
-        print(payment_method)
+        arr = []
+        for product in get_product:
+            prodct_name = product.product
+            product_quantity = product.quantity
+            arr.append((prodct_name,product_quantity))
+        if not payment_method == 'COD':
+            client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
+            payment = client.order.create({'amount':int(total_amount) * 100,'currency':'INR','payment_capture':1})
+            order_id = payment['id']
+            order_status = payment['status']
+            # if order_status == 'created':
+
     return render(request,'checkout/checkout.html',context)
 
 @csrf_exempt

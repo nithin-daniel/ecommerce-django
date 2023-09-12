@@ -15,7 +15,7 @@
                     <div>
                         <h6 class="my-0">{{ product.product }}</h6>
                     </div>
-            <span class="text-muted">&#8377;{{ product.total_amount }}</span>
+            <span class="text-muted total_amount">&#8377;{{ product.total_amount }}</span>
         </li>
         {% endfor %}
         <li class="list-group-item d-flex justify-content-between">
@@ -85,7 +85,7 @@
             </div>
           </div>
           <hr class="mb-4">
-          <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+          <a href="{% url "payments:checkout" %}"><button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button></a>
         </form>
         </div>
     </div>
