@@ -1,12 +1,13 @@
 import razorpay
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F ,Sum
 from cart.models import CartItem,Order
 from accounts.models import CustomUser
 from datetime import date
 import uuid
+from django.contrib import messages
 def payment(request,total_amount):
     print(total_amount)
     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
@@ -43,16 +44,13 @@ def checkout(request):
                 order_insert = Order(order_id=order_id,customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
                 order_insert.save()
                 CartItem.objects.all().delete()
+            else:
+                messages.error(request,'Something went wrong')
+                return redirect(checkout)
+
         else:
             order_insert = Order(order_id=uuid.uuid4(),customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
             order_insert.save()
             CartItem.objects.all().delete()
     return render(request,'checkout/checkout.html',context)
-
-@csrf_exempt
-def success(request):
-    if request.method == 'POST':
-        value = request.POST
-        print(value)
-    return render(request,'checkout/success.html')
 
