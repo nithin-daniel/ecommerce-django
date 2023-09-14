@@ -20,37 +20,48 @@ def checkout(request):
     get_product = CartItem.objects.filter(user=user).annotate(total_amount=Sum(F('product__prize')*F('quantity')))
     total_amount = sum(item.total_amount for item in get_product)
     get_user_data = CustomUser.objects.filter(email=request.user.email).first()
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
+    razorpay_order = client.order.create({'amount':int(total_amount) * 100,'currency':'INR','payment_capture':1})
+    razorpay_order_id = razorpay_order['id']
+    callback_url = 'http://127.0.0.1:8000/payment/callback'
     context = {
         'product' : get_product,
         'total_amount':total_amount,
         'current_user':get_user_data,
+        'razorpay_order_id':razorpay_order_id,
+        'callback_url':callback_url,
+        'currency':'INR',
+        'razorpay_merchant_key':settings.RAZORPAY_KEY_ID,
+        'user_name':request.user.first_name
     }
-    if request.method == 'POST':
-        first_name = request.POST['firstName']
-        last_name = request.POST['lastName']
-        address_1 = request.POST['Address1']
-        payment_method = request.POST['paymentMethod']
-        arr = []
-        for product in get_product:
-            prodct_name = product.product
-            product_quantity = product.quantity
-            arr.append((prodct_name,product_quantity))
-        if not payment_method == 'COD':
-            client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
-            payment = client.order.create({'amount':int(total_amount) * 100,'currency':'INR','payment_capture':1})
-            order_id = payment['id']
-            order_status = payment['status']
-            if order_status == 'created':
-                order_insert = Order(order_id=order_id,customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
-                order_insert.save()
-                CartItem.objects.all().delete()
-            else:
-                messages.error(request,'Something went wrong')
-                return redirect(checkout)
+    # if request.method == 'POST':
+    #     first_name = request.POST['firstName']
+    #     last_name = request.POST['lastName']
+    #     address_1 = request.POST['Address1']
+    #     payment_method = request.POST['paymentMethod']
+    #     arr = []
+    #     for product in get_product:
+    #         prodct_name = product.product
+    #         product_quantity = product.quantity
+    #         arr.append((prodct_name,product_quantity))
+    #     if not payment_method == 'COD':
+    #         client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID,settings.RAZORPAY_KEY_SECRET))
+    #         payment = client.order.create({'amount':int(total_amount) * 100,'currency':'INR','payment_capture':1})
+    #         order_id = payment['id']
+    #         order_status = payment['status']
+    #         if order_status == 'created':
+    #             order_insert = Order(order_id=order_id,customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
+    #             order_insert.save()
+    #             CartItem.objects.all().delete()
+    #         else:
+    #             messages.error(request,'Something went wrong')
+    #             return redirect(checkout)
 
-        else:
-            order_insert = Order(order_id=uuid.uuid4(),customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
-            order_insert.save()
-            CartItem.objects.all().delete()
+        # else:
+        #     order_insert = Order(order_id=uuid.uuid4(),customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
+        #     order_insert.save()
+        #     CartItem.objects.all().delete()
+    
     return render(request,'checkout/checkout.html',context)
-
+def razorpay_callback(request):
+    pass
