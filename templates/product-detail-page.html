@@ -10,8 +10,12 @@
             <h1>{{ product.title }}</h1>
             <p>{{ product.description }}</p>
             <h3>₹{{ product.prize }}</h3>
-            <a href="#" class="btn btn-primary">Add to cart</a>
-        </div>
+            {% if product_exists %}
+            <a href="{% url "cart:cart" %}" class="btn btn-primary">Go to cart</a>
+            {% else %}
+            <a href="{% url 'cart:cart-add' id=product.product_id %}" class="btn btn-primary">Add to cart</a>
+            {% endif %}    
+            </div>
         {% endfor %}
     </div>
 </div>

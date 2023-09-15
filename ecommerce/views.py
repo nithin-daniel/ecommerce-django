@@ -11,8 +11,11 @@ def home(request):
 
 def product_detail(request,id):
     all_product = Product.objects.filter(product_id=id)
+    product_exists = CartItem.objects.filter(product=id)
+    print(product_exists)
     context = {
-        'all_product':all_product
+        'all_product':all_product,
+        'product_exists':product_exists
     }
     return render(request,'product-detail-page.html',context)
 

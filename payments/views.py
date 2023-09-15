@@ -62,8 +62,9 @@ def checkout(request):
         else:
             order_insert = Order(order_id=uuid.uuid4(),customer_id=request.user,date_of_order=date.today(),shipping_address=address_1,payment_method=payment_method,order_total=total_amount,ordered_item=arr,user=request.user)
             order_insert.save()
-            CartItem.objects.all().delete()
-    
+            CartItem.objects.filter(user=request.user).all().delete()
+            messages.success(request,'Payment Successfull')
+            return redirect('home')
     return render(request,'checkout/checkout.html',context)
 
 @csrf_exempt
